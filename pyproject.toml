@@ -6,8 +6,8 @@ authors = [{ name = "Pedro Dias" }]
 readme = "README.md"
 requires-python = ">= 3.13, <4.0"
 dependencies = [
-    "flask (>=3.1.1,<4.0.0)"
-
+    "flask (>=3.1.1,<4.0.0)",
+    "numpy (>=2.3.0,<3.0.0)"
     ]
 
 
@@ -32,16 +32,18 @@ pytest-cov = "^6.1.1"
 pytest-mock = "^3.14.0"
 pytest-flask = "^1.3.0"
 pytest-html = "^4.1.1"
+pytest-asyncio = "^1.0.0"
+pytest-xdist = "^3.7.0"
+
 
 ### Plugins PyTest
 # pytest-cov	    Medição de cobertura com --cov, --cov-report=html/xml, etc.
 # pytest-asyncio	Suporte a testes async def e await com asyncio.
-#################   Flask/SQLAlchemy são síncronos, então não funciona aqui :')
+#                   Flask/SQLAlchemy são síncronos, então não funciona aqui :')
 # pytest-xdist	    Paralelização com -n auto, ótimo para acelerar os testes locais.
 # pytest-mock	    Facilita o uso do unittest.mock com fixtures.
 # pytest-django	    Para projetos Django, com setup de DB automático para testes.
 # pytest-httpx	    Simula chamadas HTTP em testes com a lib httpx.
-
 
 
 [tool.black]
@@ -75,29 +77,34 @@ pythonpath = ["."]
 minversion = "8.0"
 addopts = """
     -ra
-    -q 
+    -s
+    -v
     --dist=loadfile
-    -n 4
     --html=report.html
     --self-contained-html
     --junitxml=report.xml
+    --cov=samples/calculadora_maluca/src
+    --cov=samples/basic_code_design/src
     --cov=src
-    --cov=sample/payment/src
     --cov-report=html 
     --cov-report=xml 
     --disable-warnings
     """
-
+    # -n 4
+    # -q
+# -s -v  mais verbosidade e exibir logs/print no terminal
 # --junitxml=report.xml  para report CI/CD
 # --maxfail=1 parar no primeiro erro
 # -ra para relatório
 # -q para menos verbosidade
+# -n 4 - 'paralelizar'
 # para ver o html de coverage: start htmlcov\index.html
 # no sonar.properties: sonar.python.coverage.reportPaths=coverage.xml
 
 testpaths = [
     "tests",
-    "sample/payment/tests",
+    "samples/calculadora_maluca/tests",
+    "samples/basic_code_design/tests",
     ]
 python_files = "test_*.py"
 python_classes = "Test*"
@@ -108,7 +115,11 @@ python_functions = "test_*"
 branch = true
 source = [
     "src",
-    "sample/payment/src",
+    "samples/calculadora_maluca/src",
+    "samples/basic_code_design/src"
+    ]
+omit = [
+    "samples/calculadora_maluca/src/interfaces/driver_handler_interface.py"
     ]
 
 
@@ -117,5 +128,8 @@ show_missing = true
 fail_under = 0
 skip_covered = false
 exclude_lines = [
-    "if __name__ == .__main__.:"
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "@abstractmethod",
+    "pass"
     ]

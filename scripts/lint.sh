@@ -3,8 +3,6 @@
 poetry run python -B -m pytest --cache-clear
 
 find . -type d \( \
-    -name "__pycache__" -o \
-    -name "*.pytest_cache" -o \
     -name "htmlcov" \
 \) -exec rm -rf {} +
 
@@ -16,7 +14,7 @@ find . -type f \( \
     -name ".coverage" \
 \) -delete
 
-poetry update
+poetry update -q
 poetry run isort .
 poetry run black .
 poetry run flake8 . --statistics

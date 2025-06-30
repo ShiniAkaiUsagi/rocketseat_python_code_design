@@ -1,1 +1,0 @@
-# permitir fazer importações dentro desse diretório
