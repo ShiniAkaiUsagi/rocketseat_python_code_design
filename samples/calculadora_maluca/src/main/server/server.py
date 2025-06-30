@@ -1,5 +1,6 @@
 from flask import Flask
-from src.calculadora_maluca.src.main.routes.calculators import calc_route_bp
+
+from samples.calculadora_maluca.src.main.routes.calculators import calc_route_bp
 
 app = Flask(__name__)
 

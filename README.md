@@ -39,7 +39,10 @@ sh scripts/build.sh
 # poetry run pre-commit install
 
 ```
+## Tests
+PYTHONPATH=. poetry run pytest
+
 
 ## Calculadora maluca
-PYTHONPATH=. poetry run python src/calculadora_maluca/src/run.py
+PYTHONPATH=. poetry run python samples/calculadora_maluca/src/run.py
 

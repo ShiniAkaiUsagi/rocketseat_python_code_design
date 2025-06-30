@@ -1,4 +1,3 @@
-
 class MyClass:
 
     def registry(self) -> None:
@@ -16,7 +15,7 @@ class MyClass:
     def __insert_data(self) -> None:
         print("Insert in DB")
 
-obj = MyClass()
-obj.registry()
-# obj.__verify()
 
+# obj = MyClass()
+# obj.registry()
+# # obj.__verify()
