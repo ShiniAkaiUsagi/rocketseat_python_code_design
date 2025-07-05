@@ -19,10 +19,13 @@ class MockRequest:
 
 class MockDriverHandler(DriverHandlerInterface):
     def standard_derivation(self, numbers: List[float]) -> float:
-        return 3  # apenas representação da classe, número aleatório
+        return 3  # apenas representação da classe
 
     def variance(self, numbers: List[float]) -> float:
-        return 3  # apenas representação da classe, número aleatório
+        pass  # apenas representação da classe, número aleatório
+
+    def average(self, numbers: List[float]) -> float:
+        pass  # apenas representação da classe, número aleatório
 
     # A ideia é testarmos somente a calculadora, e não o comportamento do NumpyHandler
 

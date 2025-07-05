@@ -3,6 +3,7 @@ from unittest.mock import patch
 import pytest
 from flask import Flask
 
+from samples.calculadora_maluca.src.errors.http_bad_request import HttpBadRequestError
 from samples.calculadora_maluca.src.main.routes.calculators import calc_route_bp
 
 
@@ -46,8 +47,11 @@ class TestCalculatorsRoutes:
 
         response = client.post("/calculator/1", json={"number": "abc"})
 
-        # json_data = response.get_json()
+        json_data = response.get_json()
         assert response.status_code == 500
+        assert json_data == {
+            "error": [{"detail": "Erro calculadora 1", "title": "Server Error"}]
+        }
 
     @patch(
         "samples.calculadora_maluca.src.main.routes.calculators.calculator2_factory.NumpyHandler"
@@ -77,8 +81,11 @@ class TestCalculatorsRoutes:
 
         response = client.post("/calculator/2", json={"number": 15})
 
-        # json_data = response.get_json()
+        json_data = response.get_json()
         assert response.status_code == 500
+        assert json_data == {
+            "error": [{"detail": "Erro calculadora 2", "title": "Server Error"}]
+        }
 
     @patch(
         "samples.calculadora_maluca.src.main.routes.calculators.calculator3_factory.NumpyHandler"
@@ -102,11 +109,50 @@ class TestCalculatorsRoutes:
         "samples.calculadora_maluca.src.main.routes.calculators.calculator3_factory.NumpyHandler"
     )
     @patch("samples.calculadora_maluca.src.main.routes.calculators.calculator3_factory")
-    def test_calculator_3_failure(self, mock_calculator2, mock_numpy_handler, client):
-        mock_calc_instance = mock_calculator2.return_value
-        mock_calc_instance.calculate.side_effect = Exception("Erro calculadora 3")
+    def test_calculator_3_failure(self, mock_calculator3, mock_numpy_handler, client):
+        mock_calc_instance = mock_calculator3.return_value
+        mock_calc_instance.calculate.side_effect = HttpBadRequestError(
+            "Erro calculadora 3"
+        )
 
         response = client.post("/calculator/3", json={"number": 15})
 
-        # json_data = response.get_json()
+        json_data = response.get_json()
+        assert response.status_code == 400
+        assert json_data == {
+            "error": [{"detail": "Erro calculadora 3", "title": "BadRequest"}]
+        }
+
+    @patch(
+        "samples.calculadora_maluca.src.main.routes.calculators.calculator4_factory.NumpyHandler"
+    )
+    @patch("samples.calculadora_maluca.src.main.routes.calculators.calculator4_factory")
+    def test_calculator_4_success(self, mock_calculator4, mock_numpy_handler, client):
+        mock_calc_instance = mock_calculator4.return_value
+        mock_calc_instance.calculate.return_value = {
+            "data": {"calculator": 4, "result": 12.34}
+        }
+
+        response = client.post("/calculator/4", json={"number": 9})
+
+        json_data = response.get_json()
+        assert response.status_code == 200
+        assert json_data["success"] is True
+        assert "data" in json_data
+        mock_calc_instance.calculate.assert_called_once()
+
+    @patch(
+        "samples.calculadora_maluca.src.main.routes.calculators.calculator4_factory.NumpyHandler"
+    )
+    @patch("samples.calculadora_maluca.src.main.routes.calculators.calculator4_factory")
+    def test_calculator_4_failure(self, mock_calculator4, mock_numpy_handler, client):
+        mock_calc_instance = mock_calculator4.return_value
+        mock_calc_instance.calculate.side_effect = Exception("Erro calculadora 4")
+
+        response = client.post("/calculator/4", json={"number": 15})
+
+        json_data = response.get_json()
         assert response.status_code == 500
+        assert json_data == {
+            "error": [{"detail": "Erro calculadora 4", "title": "Server Error"}]
+        }

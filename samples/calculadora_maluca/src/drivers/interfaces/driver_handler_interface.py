@@ -11,3 +11,7 @@ class DriverHandlerInterface(ABC):
     @abstractmethod
     def variance(self, numbers: List[float]) -> float:  # pragma: no cover
         pass
+
+    @abstractmethod
+    def average(self, numbers: List[float]) -> float:  # pragma: no cover
+        pass

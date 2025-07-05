@@ -6,9 +6,9 @@ class HttpUnprocessableEntityError(Exception):
         self.status_code = 422
 
 
-try:
-    print("Try block")
-    raise HttpUnprocessableEntityError("Exception raised - eg")
-except Exception as exception:
-    print(exception.name)
-    print(exception.status_code)
+# try:
+#     print("Try block")
+#     raise HttpUnprocessableEntityError("Exception raised - eg")
+# except Exception as exception:
+#     print(exception.name)
+#     print(exception.status_code)
