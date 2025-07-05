@@ -21,6 +21,9 @@ class MockDriverHandler(DriverHandlerInterface):
     def standard_derivation(self, numbers: List[float]) -> float:
         return 3  # apenas representação da classe, número aleatório
 
+    def variance(self, numbers: List[float]) -> float:
+        return 3  # apenas representação da classe, número aleatório
+
     # A ideia é testarmos somente a calculadora, e não o comportamento do NumpyHandler
 
 
@@ -61,7 +64,7 @@ class TestCalculator2:
             calculator_2.calculate(mock_request)
         assert "Bad formatted body" in str(exception.value)
 
-    def test_calculate1_with_value_type_error(self):
+    def test_calculate3_with_value_type_error(self):
         mock_request = MockRequest(body={"numbers": "a"})
         calculator_2 = Calculator2(MockDriverHandler())
 
