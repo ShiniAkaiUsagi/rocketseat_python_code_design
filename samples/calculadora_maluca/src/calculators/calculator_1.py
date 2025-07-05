@@ -2,6 +2,10 @@ from typing import Dict
 
 from flask import Request as FlaskRequest
 
+from samples.calculadora_maluca.src.errors.http_unprocessable_entity import (
+    HttpUnprocessableEntityError,
+)
+
 
 class Calculator1:
 
@@ -23,11 +27,11 @@ class Calculator1:
 
     def __validate_body(self, body: Dict) -> float:
         if "number" not in body:
-            raise ValueError("Bad formatted body!")
+            raise HttpUnprocessableEntityError("Bad formatted body!")
         if not isinstance(body["number"], (int, float)):
-            raise TypeError("Type not valid. Expected int or float!")
+            raise HttpUnprocessableEntityError("Type not valid. Expected int or float!")
         if body["number"] < 0:
-            raise ValueError("Not accepted negative number!")
+            raise HttpUnprocessableEntityError("Not accepted negative number!")
         input_data = body["number"]
         return input_data
 

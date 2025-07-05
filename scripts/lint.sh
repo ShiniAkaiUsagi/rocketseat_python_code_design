@@ -18,4 +18,4 @@ poetry update -q
 poetry run isort .
 poetry run black .
 poetry run flake8 . --statistics
-poetry run bandit --recursive . -c pyproject.toml
+poetry run bandit -q --recursive . -c pyproject.toml

@@ -10,15 +10,16 @@ from samples.calculadora_maluca.src.errors.http_unprocessable_entity import (
 )
 
 
-class Calculator2:
+class Calculator4:
     def __init__(self, driver_handler: DriverHandlerInterface) -> None:
         self.__driver_handler = driver_handler
 
     def calculate(self, request: FlaskRequest) -> Dict:  # type: ignore
         body = request.json
         input_data = self.__validate_body(body)
-        result = self.__process_data(input_data)
-        formatted_response = self.__format_response(result)
+        average = self.__calculate_average(input_data)
+
+        formatted_response = self.__format_response(average)
         return formatted_response
 
     def __validate_body(self, body: Dict) -> float:
@@ -30,20 +31,16 @@ class Calculator2:
         if not body["numbers"]:
             raise HttpUnprocessableEntityError("Numbers list should not be empty!")
 
-        for number in body["numbers"]:
-            if number == 0:
-                raise HttpUnprocessableEntityError(
-                    "Zero value is not accepted for this calculator!"
-                )
-            if number < 0:
-                raise HttpUnprocessableEntityError("Not accepted negative number!")
+        if len(body["numbers"]) < 2:
+            raise HttpUnprocessableEntityError(
+                "At least two numbers are required to calculate the average!"
+            )
+
         input_data = body["numbers"]
         return input_data
 
-    def __process_data(self, input_data: List[float]) -> float:
-        first_process_result = [(num * 11) ** 0.95 for num in input_data]
-        result = self.__driver_handler.standard_derivation(first_process_result)
-        return 1 / result
+    def __calculate_average(self, numbers: List[float]) -> float:
+        return self.__driver_handler.average(numbers)
 
     def __format_response(self, calculated_number: float) -> Dict:
-        return {"data": {"calculator": 2, "result": round(calculated_number, 2)}}
+        return {"data": {"calculator": 4, "result": round(calculated_number, 2)}}
