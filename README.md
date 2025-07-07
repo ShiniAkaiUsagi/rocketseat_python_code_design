@@ -1,13 +1,8 @@
-# RocketSeat - Desafio 01 - Agenda
+# RocketSeat
 
 Projeto criado como forma de fixar e avaliar os conhecimentos obtidos no módulo 4: "Introdução ao Design de Código".
-O [Desafio proposto](Desafio04.txt).
+[Desafio](Desafio.txt).
 
-### Funcionalidades
-
-Sample: Projeto de teste criado em aula simulando pagament com pix via api.
-
-Desafio: Projeto simples de chat por um servidor local com atualização em tempo real.
 
 ## Requisitos
 
